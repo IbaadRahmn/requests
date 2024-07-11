@@ -806,14 +806,23 @@ class TestRequests:
             def __len__(self):
                 return self.length
 
-            def read(self, size=None):
-                if size:
-                    ret = self.data[self.index : self.index + size]
-                    self.index += size
-                else:
-                    ret = self.data[self.index :]
-                    self.index = self.length
-                return ret
+            # Initialize coverage tracking global variable
+branch_coverage = {
+    "read_1": False,  # if branch for size is not None
+    "read_2": False   # else branch for size is None
+}
+
+def read(self, size=None):
+    if size:
+        branch_coverage["read_1"] = True
+        ret = self.data[self.index : self.index + size]
+        self.index += size
+    else:
+        branch_coverage["read_2"] = True
+        ret = self.data[self.index :]
+        self.index = self.length
+    return ret
+
 
             def tell(self):
                 return self.index
